@@ -8,7 +8,7 @@
 - Step 2: S3 Bucket `cloud-video-processing-project` with 5 folders ✅
 - Step 3: SQS Queue `video-processing-queue` ✅
 - Step 4: IAM Role ✅
-- Step 5: EC2 Instance `video-processing-server` (IP: 13.233.127.175) ✅
+- Step 5: EC2 Instance `video-processing-server`  ✅
 - Step 6: Connected to EC2 ✅
 - Step 7: Server updated ✅
 - Step 8: Node.js + npm installed ✅
@@ -71,7 +71,7 @@ AWS_SECRET_ACCESS_KEY=YOUR_NEW_SECRET_HERE
 
 Also update in `frontend/.env` if backend is on EC2:
 ```
-REACT_APP_API_URL=http://13.233.127.175:5000
+REACT_APP_API_URL=http://PUBLIC_IP(EC2):5000
 ```
 
 ---
@@ -145,7 +145,7 @@ pm2 save
 
 From your browser or Postman:
 ```
-http://13.233.127.175:5000/api/health
+http://PUBLIC_IP(EC2):5000/api/health
 ```
 
 You should see:
@@ -167,7 +167,7 @@ React opens at: http://localhost:3000
 
 The `.env` file already points to your EC2:
 ```
-REACT_APP_API_URL=http://13.233.127.175:5000
+REACT_APP_API_URL=http://PUBLIC_IP(EC2):5000
 ```
 
 ---
@@ -214,7 +214,7 @@ sudo cp -r ~/frontend-build/* /var/www/html/
 sudo systemctl restart nginx
 ```
 
-Now your full app runs at: http://13.233.127.175
+Now your full app runs at: http://PUBLIC_IP(EC2)
 
 ---
 
@@ -266,18 +266,3 @@ React Gallery shows results
 ```
 
 ---
-
-## 👥 Work Division for 4 Members
-
-| Member | Task |
-|--------|------|
-| Member 1 | React Frontend (UploadPage + GalleryPage) |
-| Member 2 | Node Backend API (server.js + routes) |
-| Member 3 | AWS Infrastructure (S3 + SQS + IAM + EC2) |
-| Member 4 | Video Processing Worker (worker.js + FFmpeg) |
-
----
-
-## 📝 Resume Description
-
-> Built a scalable **Distributed Cloud Video Processing Platform** using **AWS S3, EC2, SQS, CloudWatch, and IAM** with a **React** frontend and **Node.js/Express** backend. The system supports asynchronous video transcoding, compression (up to 75% size reduction), thumbnail generation, watermarking, metadata extraction, and preview clip generation using **FFmpeg**, with queue-based job processing via **Amazon SQS**.
