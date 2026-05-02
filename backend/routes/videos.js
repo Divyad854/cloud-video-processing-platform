@@ -41,41 +41,49 @@ router.get('/download', async (req, res) => {
 });
 // GET /api/videos/:videoId/status - Check processing status
 router.get('/:videoId/status', async (req, res) => {
+
   const { videoId } = req.params;
-  
+
   try {
-    const status = {
-      videoId,
-      compressed: false,
-      thumbnail: false,
-      preview: false,
-      watermark: false,
-      metadata: false,
-      converted: false
-    };
 
     const checkKey = async (key) => {
       try {
-        await s3.headObject({ Bucket: BUCKET, Key: key }).promise();
+        await s3.headObject({
+          Bucket: BUCKET,
+          Key: key
+        }).promise();
         return true;
-      } catch { return false; }
+      } catch {
+        return false;
+      }
     };
 
-    status.compressed = await checkKey(`processed/${videoId}_compressed.mp4`);
-    status.thumbnail = await checkKey(`thumbnails/${videoId}_thumb.jpg`);
-    status.preview = await checkKey(`preview/${videoId}_preview.mp4`);
-    status.watermark = await checkKey(`processed/${videoId}_watermark.mp4`);
-    status.metadata = await checkKey(`metadata/${videoId}.json`);
-    status.converted = await checkKey(`processed/${videoId}.webm`);
+    const status = {
+      compressed: await checkKey(`processed/${videoId}_compressed.mp4`),
+      thumbnail: await checkKey(`thumbnails/${videoId}_thumb.jpg`),
+      preview: await checkKey(`preview/${videoId}_preview.mp4`),
+      watermark: await checkKey(`processed/${videoId}_watermark.mp4`),
+      metadata: await checkKey(`metadata/${videoId}.json`),
+      converted: await checkKey(`processed/${videoId}.webm`)
+    };
 
-    const completed = Object.values(status).filter(v => v === true).length;
-    status.progress = Math.round((completed / 6) * 100);
-    status.done = completed === 6;
+    const completed = Object.values(status).filter(v => v).length;
 
-    res.json({ success: true, data: status });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    const progress = Math.round((completed / 6) * 100);
+
+    res.json({
+      success: true,
+      data: {
+        ...status,
+        progress,
+        done: completed === 6
+      }
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
+
 });
 
 // GET /api/videos/:videoId/metadata - Get video metadata
