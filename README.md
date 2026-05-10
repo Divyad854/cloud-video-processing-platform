@@ -275,9 +275,3 @@ React Gallery shows results
 | Member 2 | Node Backend API (server.js + routes) |
 | Member 3 | AWS Infrastructure (S3 + SQS + IAM + EC2) |
 | Member 4 | Video Processing Worker (worker.js + FFmpeg) |
-
----
-
-## 📝 Resume Description
-
-> Built a scalable **Distributed Cloud Video Processing Platform** using **AWS S3, EC2, SQS, CloudWatch, and IAM** with a **React** frontend and **Node.js/Express** backend. The system supports asynchronous video transcoding, compression (up to 75% size reduction), thumbnail generation, watermarking, metadata extraction, and preview clip generation using **FFmpeg**, with queue-based job processing via **Amazon SQS**.
